@@ -27,6 +27,8 @@ server {
         proxy_read_timeout 1200;
 
         proxy_pass   http://api_server;
+
+        client_max_body_size 100m; # This is for deis push (tars of code might be large)
     }
     
     # serve up application slugs from build system
