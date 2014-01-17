@@ -50,14 +50,6 @@ sudo 'git' do
   commands [ node.deis.controller.dir + '/bin/pre-push-hook',
              node.deis.controller.dir + '/bin/push-hook', ]
 end
-# also allow deis permissions for deis push
-sudo 'deis' do
-  user  'deis'
-  runas node.deis.username
-  nopasswd  true
-  commands [ node.deis.controller.dir + '/bin/pre-push-hook',
-             node.deis.controller.dir + '/bin/push-hook', ]
-end
 
 # synchronize the gitosis repository
 
