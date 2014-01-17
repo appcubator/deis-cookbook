@@ -28,7 +28,7 @@ end
 # create a docker group and grant it access to
 # /var/run/docker.sock
 group 'docker' do
-  members ['git']
+  members ['git', 'deis']
   action :create
   system true
 end
