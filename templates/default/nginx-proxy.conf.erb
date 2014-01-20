@@ -25,10 +25,9 @@ server {
 
 	server_name <%= @server_name %>;
 
-    client_max_body_size 30m;
-
 	<% if @backends.length > 0 %>
 	location / {
+        client_max_body_size 30m;
 		proxy_pass http://<%= @app %>-containers;
                 proxy_set_header        Host            $host;
                 proxy_set_header        X-Real-IP       $remote_addr;
