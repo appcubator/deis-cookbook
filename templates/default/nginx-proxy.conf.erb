@@ -25,6 +25,8 @@ server {
 
 	server_name <%= @server_name %>;
 
+    client_max_body_size 30m;
+
 	<% if @backends.length > 0 %>
 	location / {
 		proxy_pass http://<%= @app %>-containers;
