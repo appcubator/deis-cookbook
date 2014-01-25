@@ -7,7 +7,7 @@ server {
     listen <%= @http_port %> default_server;
     server_name localhost;
 
-    client_max_body_size 100m; # This is for deis push (tars of code might be large)
+    client_max_body_size 200m; # This is for deis push (tars of code might be large)
 
     location /static {
         root <%= @server_root %>;
