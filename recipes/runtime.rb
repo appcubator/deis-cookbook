@@ -77,7 +77,7 @@ formations.each do |f|
           mkdir -p #{slug_dir}
           cd #{slug_dir}
           curl -s #{slug_url} > #{slug_path}
-          tar mxfz #{slug_path}
+          tar xfz #{slug_path}
           rm #{slug_path}
           EOF
         not_if "test -f #{slug_path}"
