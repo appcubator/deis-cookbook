@@ -12,7 +12,6 @@ setuid deis
 setgid deis
 
 # set environment variables
-source /etc/environment
 env HOME=<%= @home %>
 env DJANGO_HOME=<%= @django_home %>
 env DJANGO_PORT=<%= @port %>
@@ -21,12 +20,16 @@ env DJANGO_WORKERS=<%= @workers %>
 
 pre-start script
 cd $DJANGO_HOME
+. /etc/environment
 . venv/bin/activate
 ./manage.py syncdb --migrate --noinput
 end script
 
 script
 cd $DJANGO_HOME
+. /etc/environment
 . venv/bin/activate
-exec gunicorn deis.wsgi -b $DJANGO_BIND:$DJANGO_PORT -w $DJANGO_WORKERS -k gevent -n deis --access-logfile /var/log/deis/access.log --error-logfile /var/log/deis/server.log --log-level debug
+exec gunicorn deis.wsgi -b $DJANGO_BIND:$DJANGO_PORT -w $DJANGO_WORKERS -k gevent -n deis --access-logfile /var/log/deis/access.log --error-logfile /var/log/deis/server.log --log-level debug \
+        -e CONTROLLER_DIR=$CONTROLLER_DIR \
+        -e SLUG_DIR=$SLUG_DIR
 end script
