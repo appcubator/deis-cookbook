@@ -124,9 +124,12 @@ end # formations.each
 
 
 # remove old slug dirs
-Dir.entries(slug_root).each do |slug_dir|
-  next if slug_dir == '.'
-  next if slug_dir == '..'
+slug_root = node.deis.runtime.slug_dir
+Dir.entries(slug_root).each do |f|
+  next if f == '.'
+  next if f == '..'
+
+  slug_dir = "#{slug_root}/#{f}"
 
   file slug_dir do
     action :delete
