@@ -134,7 +134,7 @@ Dir.entries(slug_root).each do |f|
   directory slug_dir do
     action :delete
     recursive true
-    not_if active_slug_paths.include? f
+    not_if { active_slug_paths.include? f }
   end
 end
 
