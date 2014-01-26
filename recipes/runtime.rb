@@ -84,7 +84,7 @@ formations.each do |f|
       end
 
       # will prevent deleted these in the SLUG_DIR step
-      active_slug_paths.push(slug_path)
+      active_slug_paths.push("#{app_id}-v#{version}")
 
     end
   
@@ -134,7 +134,7 @@ Dir.entries(slug_root).each do |f|
   directory slug_dir do
     action :delete
     recursive true
-    not_if active_slug_paths.include? slug_dir
+    not_if active_slug_paths.include? f
   end
 end
 
