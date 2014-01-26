@@ -131,8 +131,9 @@ Dir.entries(slug_root).each do |f|
 
   slug_dir = "#{slug_root}/#{f}"
 
-  file slug_dir do
+  directory slug_dir do
     action :delete
+    recursive true
     not_if active_slug_paths.include? slug_dir
   end
 end
