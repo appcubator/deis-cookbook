@@ -77,7 +77,7 @@ formations.each do |f|
           mkdir -p #{slug_dir}
           cd #{slug_dir}
           curl -s #{slug_url} > #{slug_path}
-          tar mxfz #{slug_path}
+          tar xfz #{slug_path}
           rm #{slug_path}
           EOF
         not_if "test -f #{slug_path}"
@@ -134,7 +134,11 @@ Dir.entries(slug_root).each do |f|
   directory slug_dir do
     action :delete
     recursive true
+<<<<<<< HEAD
     not_if active_slug_paths.include? f
+=======
+    not_if { active_slug_paths.include? f }
+>>>>>>> runtime-cleanup
   end
 end
 
