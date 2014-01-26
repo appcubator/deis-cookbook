@@ -39,6 +39,7 @@ package 'curl'
 formations = data_bag('deis-formations')
 
 services = []
+active_slug_paths = []
 formations.each do |f|
   
   formation = data_bag_item('deis-formations', f)
@@ -76,10 +77,15 @@ formations.each do |f|
           mkdir -p #{slug_dir}
           cd #{slug_dir}
           curl -s #{slug_url} > #{slug_path}
-          tar xfz #{slug_path}
+          tar mxfz #{slug_path}
+          rm #{slug_path}
           EOF
         not_if "test -f #{slug_path}"
       end
+
+      # will prevent deleted these in the SLUG_DIR step
+      active_slug_paths.push(slug_path)
+
     end
   
     # iterate over this application's process formation by
@@ -115,6 +121,20 @@ formations.each do |f|
     end
   end # formations['apps'].each
 end # formations.each
+
+
+# remove old slug dirs
+Dir.entries(slug_root).each do |slug_dir|
+  next if slug_dir == '.'
+  next if slug_dir == '..'
+
+  file slug_dir do
+    action :delete
+    not_if active_slug_paths.include? slug_dir
+  end
+end
+
+
 # 
 # # purge old container services
 # 
