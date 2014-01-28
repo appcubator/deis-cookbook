@@ -7,6 +7,10 @@ directory node.deis.runtime.dir do
   mode 0700
 end
 
+remote_file "#{node.deis.runtime.dir}/is_running.py" do
+  source "https://raw.github.com/appcubator/deis/master/bin/is_running.py"
+end
+
 directory node.deis.runtime.slug_dir do
   user node.deis.username
   group node.deis.group
