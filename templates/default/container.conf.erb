@@ -25,7 +25,7 @@ pre-start script
   docker rm <%= @name %> >/dev/null 2>&1 || true
   RUNTIME_DIR=/opt/deis/runtime
   # only execute docker run if the container is not running
-  docker inspect <%= @name %> | $RUNTIME_DIR/is_running.py && docker run -d -name="<%= @name %>" -v <%= @slug_dir %>:/app -p <%= @port %>:<%= @port %> -e PORT=<%= @port %><% @env.each_pair do |k,v| %> -e <%= k.upcase %>='<%= v %>'<% end %> <%= @image %> start <%= @c_type %>
+  docker inspect <%= @name %> | $RUNTIME_DIR/is_not_running.py && docker run -d -name="<%= @name %>" -v <%= @slug_dir %>:/app -p <%= @port %>:<%= @port %> -e PORT=<%= @port %><% @env.each_pair do |k,v| %> -e <%= k.upcase %>='<%= v %>'<% end %> <%= @image %> start <%= @c_type %>
 end script
 
 pre-stop script
