@@ -9,6 +9,7 @@ end
 
 remote_file "#{node.deis.runtime.dir}/is_running.py" do
   source "https://raw.github.com/appcubator/deis/master/bin/is_running.py"
+  mode 0777
 end
 
 directory node.deis.runtime.slug_dir do
