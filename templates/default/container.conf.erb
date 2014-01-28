@@ -15,14 +15,17 @@ normal exit 0 CONT
 
 script
   # try to remove the container, if it succeeds something went wrong in pre-start so exit non-zero
-  docker rm <%= @name %> >/dev/null 2>&1 && exit 1 
+  docker rm <%= @name %> >/dev/null 2>&1 && exit 1
   # attach to the container and stream output to syslog
   exec docker attach <%= @name %> 2>&1 | logger -p local0.info -t <%= @app_name %>[<%=@c_type%>.<%= @c_num %>]
 end script
 
 pre-start script
+  # TODO get clarification on the purpose of this line. looks like it attempts to clean up after a stopped docker container.
   docker rm <%= @name %> >/dev/null 2>&1 || true
-  docker run -d -name="<%= @name %>" -v <%= @slug_dir %>:/app -p <%= @port %>:<%= @port %> -e PORT=<%= @port %><% @env.each_pair do |k,v| %> -e <%= k.upcase %>='<%= v %>'<% end %> <%= @image %> start <%= @c_type %>
+  CONTROLLER_DIR=/opt/deis/controller
+  # only execute docker run if the container is not running
+  docker inspect <%= @name %> | $CONTROLLER_DIR/bin/is_running.py && docker run -d -name="<%= @name %>" -v <%= @slug_dir %>:/app -p <%= @port %>:<%= @port %> -e PORT=<%= @port %><% @env.each_pair do |k,v| %> -e <%= k.upcase %>='<%= v %>'<% end %> <%= @image %> start <%= @c_type %>
 end script
 
 pre-stop script
