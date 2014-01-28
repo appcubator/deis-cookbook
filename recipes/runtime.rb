@@ -7,8 +7,8 @@ directory node.deis.runtime.dir do
   mode 0700
 end
 
-remote_file "#{node.deis.runtime.dir}/is_running.py" do
-  source "https://raw.github.com/appcubator/deis/master/bin/is_running.py"
+remote_file "#{node.deis.runtime.dir}/is_not_running.py" do
+  source "https://raw.github.com/appcubator/deis/master/bin/is_not_running.py"
   mode 0777
 end
 
