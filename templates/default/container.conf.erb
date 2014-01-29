@@ -24,11 +24,24 @@ pre-start script
   # TODO get clarification on the purpose of this line. looks like it attempts to clean up after a stopped docker container.
   docker rm <%= @name %> >/dev/null 2>&1 || true
   RUNTIME_DIR=/opt/deis/runtime
+  set +e # inspect and is_not_running may fail, this is intentional to detect if container exists/is running
+  INSPECT_OUT=`docker inspect klutzy-gemstone.web.1`
   # only execute docker run if the container is not running
-  docker inspect <%= @name %> | $RUNTIME_DIR/is_not_running.py && docker run -d -name="<%= @name %>" -v <%= @slug_dir %>:/app -p <%= @port %>:<%= @port %> -e PORT=<%= @port %><% @env.each_pair do |k,v| %> -e <%= k.upcase %>='<%= v %>'<% end %> <%= @image %> start <%= @c_type %>
+  if [ $? = 0 ]; then
+    echo $INSPECT_OUT | $RUNTIME_DIR/is_not_running.py
+    # if it's already running, we don't need to do anything here.
+    if [ $? = 1 ]; then
+      exit 0 # TODO make sure this doesn't cause the 'script' stanza to not execute
+    fi
+  fi
+  set -e
+  docker run -d -name="<%= @name %>" -v <%= @slug_dir %>:/app -p <%= @port %>:<%= @port %> -e PORT=<%= @port %><% @env.each_pair do |k,v| %> -e <%= k.upcase %>='<%= v %>'<% end %> <%= @image %> start <%= @c_type %>
 end script
 
 pre-stop script
   docker stop <%= @name %> >/dev/null
   docker rm <%= @name %> >/dev/null
 end script
+
+
+
