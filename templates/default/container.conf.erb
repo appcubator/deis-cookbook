@@ -25,7 +25,7 @@ pre-start script
   docker rm <%= @name %> >/dev/null 2>&1 || true
   RUNTIME_DIR=/opt/deis/runtime
   set +e # inspect and is_not_running may fail, this is intentional to detect if container exists/is running
-  INSPECT_OUT=`docker inspect klutzy-gemstone.web.1`
+  INSPECT_OUT=`docker inspect <%= @name %>`
   # only execute docker run if the container is not running
   if [ $? = 0 ]; then
     echo $INSPECT_OUT | $RUNTIME_DIR/is_not_running.py
