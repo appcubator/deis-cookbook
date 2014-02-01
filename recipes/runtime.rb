@@ -59,6 +59,14 @@ formations.each do |f|
     # skip this app if there's an empty release or build
     next if app['release'] == {}
     next if app['release']['build'] == {}
+
+    # skip this app if there's no container to be run on this runtime
+    app['containers'].each_pair do |c_type, c_formation|
+      c_formation.each_pair do |c_num, node_port|
+        nodename, port = node_port.split(':')
+        next if nodename != node.name
+      end
+    end
     
     version = app['release']['version']
     build = app['release']['build']
@@ -104,12 +112,6 @@ formations.each do |f|
         
         next if nodename != node.name
 
-        # determine build command, if one exists
-        if build != {}
-          command = build['procfile'][c_type]
-        else
-          command = nil # assume command baked into docker image
-        end
         name = "#{app_id}.#{c_type}.#{c_num}"
         # define the container
         container name do
