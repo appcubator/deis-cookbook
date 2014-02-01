@@ -61,12 +61,16 @@ formations.each do |f|
     next if app['release']['build'] == {}
 
     # skip this app if there's no container to be run on this runtime
+    container_to_be_run = false
     app['containers'].each_pair do |c_type, c_formation|
       c_formation.each_pair do |c_num, node_port|
         nodename, port = node_port.split(':')
-        next if nodename != node.name
+        if nodename == node.name
+          container_to_be_run = true
+        end
       end
     end
+    next if not container_to_be_run
     
     version = app['release']['version']
     build = app['release']['build']
