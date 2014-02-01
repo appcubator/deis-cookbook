@@ -102,33 +102,33 @@ formations.each do |f|
 
       # will prevent deleted these in the SLUG_DIR step
       active_slug_paths.push("#{app_id}-v#{version}")
-
-    end
   
-    # iterate over this application's process formation by
-    # Procfile-defined type
-    
-    app['containers'].each_pair do |c_type, c_formation|
+      # iterate over this application's process formation by
+      # Procfile-defined type
       
-      c_formation.each_pair do |c_num, node_port|
-      
-        nodename, port = node_port.split(':')
+      app['containers'].each_pair do |c_type, c_formation|
         
-        next if nodename != node.name
+        c_formation.each_pair do |c_num, node_port|
+        
+          nodename, port = node_port.split(':')
+          
+          next if nodename != node.name
 
-        name = "#{app_id}.#{c_type}.#{c_num}"
-        # define the container
-        container name do
-          app_name app_id
-          c_type c_type
-          c_num c_num
-          env config
-          port port
-          image 'deis/slugrunner'
-          slug_dir slug_dir
+          name = "#{app_id}.#{c_type}.#{c_num}"
+          # define the container
+          container name do
+            app_name app_id
+            c_type c_type
+            c_num c_num
+            env config
+            port port
+            image 'deis/slugrunner'
+            slug_dir slug_dir
+          end
+          services.push("deis-#{name}")
         end
-        services.push("deis-#{name}")
       end
+
     end
   end # formations['apps'].each
 end # formations.each
