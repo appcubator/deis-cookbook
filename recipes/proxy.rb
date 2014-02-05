@@ -28,12 +28,12 @@ formations.each do |f|
     proxy = app['proxy']
 
     if formation['domain'].nil?
-      server_name = 'localhost'
+      domains = ['localhost']
     else
-      server_name = "#{app_id}.#{formation['domain']}"
+      domains = app['domains']
     end
     
-    vars = {:server_name => server_name,
+    vars = {:domains => domains,
             :app => app_id,
             :port => proxy['port'],
             :backends => proxy['backends'], 

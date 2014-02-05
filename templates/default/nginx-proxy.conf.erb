@@ -23,7 +23,7 @@ upstream <%= @app %>-containers {
 server {
 	listen <%= @port %>;
 
-	server_name <%= @server_name %>;
+	server_name <%= @domains.join(' ') %>;
 
 	<% if @backends.length > 0 %>
 	location / {
